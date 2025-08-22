@@ -1,98 +1,109 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+#2.danhgiaapi
+1. Cài đặt và cấu hình
+   Tải ngrok và dự án. sử dụng ngrok http 3000 để điều hướng. npm i để cài package, chạy server sử dụng npm run start.
+   Cấu hình bitrix24:
+   - vào phần contact, tạo trường -> thêm số tài khoản, tên ngân hàng, địa chỉ
+   - vào phần ứng dụng -> tài nguyên nhà phát triển -> khác -> ứng dụng cục bộ -> phần dường dẫn xử lý cho <đường dẫn ngrok>/bitrix/install, ví dụ: https://6853daf89350.ngrok-free.app/bitrix/install -> lưu, sẽ hiện ra client_id và client_secret -> lưu vào .env, đường dẫn cài đặt ban đầu sẽ có dạng <linkbitrix>/oauth/authorize/?client_id=<client_id>&response_type=code&redirect_uri=<đường dẫn ngrok>/bitrix/install, ví dụ: https://viethung.bitrix24.vn/oauth/authorize/?client_id=local.68a5698f61b5e5.43162226&response_type=code&redirect_uri=https://6853daf89350.ngrok-free.app/bitrix/install
+     -> lưu, bấm cài đặt lại -> từ đó ta có được access_token và refresh_token
+2. Các endpoint api sẽ xuất hiện trong /docs đã được setup bằng @nestjs/swagger
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/7684958e-85c6-4566-aaa3-5b4b05660524" />
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+BitrixController
+a) Cài đặt ứng dụng trên Bitrix24
+Mở trình duyệt:
+GET http://localhost:3000/bitrix/install?code=OAUTH_CODE
+  Nếu code hợp lệ → token được lưu trong token.json.
+  Hoặc nhận POST webhook/installation event:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+POST http://localhost:3000/bitrix/install
+  Body: { DOMAIN: 'example.bitrix24.com', MEMBER_ID: '123' }
 
-## Description
+b) Test gọi API Bitrix24
+GET http://localhost:3000/bitrix/test
+Gọi crm.contact.list, trả về danh sách contact.
+Service tự check token hết hạn → refresh → gọi lại.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+c) Refresh token thủ công
+POST http://localhost:3000/bitrix/refresh
+Trả về access token mới lưu vào token.json
 
-## Project setup
+ContactsController
 
-```bash
-$ npm install
-```
+Controller này có API key guard, nên cần gửi header x-api-key đúng nếu bạn đã setup ApiKeyGuard.
 
-## Compile and run the project
+a) Contact
+List all:
+GET http://localhost:3000/contacts
 
-```bash
-# development
-$ npm run start
+Create contact:
+POST http://localhost:3000/contacts
+Body: {
+  "name": "Nguyen",
+  "last_name": "Van A",
+  "phone": "0123456789",
+  "email": "abc@example.com",
+  "address": "Hanoi",
+  "bank_account": "123456789",
+  "bank_name": "Vietcombank",
+  "website": "example.com"
+}
 
-# watch mode
-$ npm run start:dev
+Update contact:
+PUT http://localhost:3000/contacts/1
+Body: { ...same as create... }
 
-# production mode
-$ npm run start:prod
-```
+Delete contact:
+DELETE http://localhost:3000/contacts/1
 
-## Run tests
+b) Requisite (thông tin bổ sung của contact)
 
-```bash
-# unit tests
-$ npm run test
+List requisites:
 
-# e2e tests
-$ npm run test:e2e
+GET http://localhost:3000/contacts/requisite
 
-# test coverage
-$ npm run test:cov
-```
 
-## Deployment
+Create requisite:
+POST http://localhost:3000/contacts/requisite
+Body: {
+  "ID": "9",
+  "ENTITY_TYPE_ID": "3", (3 đại diện cho contact)
+  "ENTITY_ID": "15", (id contact)
+  "PRESET_ID": "1",
+  "DATE_CREATE": "2025-08-20T19:17:12+03:00",
+  "NAME": "MB Bank", (tên ngân hàng)
+  "RQ_INN": "5168468468", (số tài khoản)
+}
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Update requisite:
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+PUT http://localhost:3000/contacts/requisite/:id
+Body: { "FIELD_NAME": "new_value" }
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+Delete requisite:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+DELETE http://localhost:3000/contacts/requisite/123
 
-## Support
+3. Lỗi xử lý và cách kiểm tra
+Các lỗi đã xử lý:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+OAuth / Token
+Không có code khi install app: Endpoint /bitrix/install kiểm tra query code. Trả về thông báo: "Install GET received, but no ?code found."
+Token hết hạn: BitrixService tự động refresh token khi gọi API. Trả về thông báo: "Token refreshed".
+Refresh token thất bại: Nếu refresh không thành công, log lỗi và ném lỗi InternalServerError với thông báo: "Token refresh failed".
+Trao đổi code → token thất bại: Nếu OAuth exchange lỗi, log chi tiết và ném InternalServerError với thông báo: "OAuth exchange failed".
 
-## Stay in touch
+API Bitrix24
+HTTP 4xx / 5xx từ Bitrix24: Log chi tiết và ném InternalServerError, thông báo ví dụ: "Bitrix API error 400".
+Timeout / lỗi mạng: Log lỗi và ném InternalServerError, thông báo ví dụ: "Timeout when calling Bitrix API".
+Token không hợp lệ / expired: Refresh và retry 1 lần, nếu vẫn lỗi ném InternalServerError, thông báo ví dụ: "Bitrix API call failed after refresh".
+Contact / Requisite
+ID không tồn tại khi update/delete: Ném NotFoundException với thông báo: "Contact not found" hoặc "Requisite not found".
+Tạo contact/requisite thất bại: Kiểm tra kết quả API, nếu thất bại ném NotFoundException với thông báo: "Failed to create contact" hoặc "Failed to create requisite".
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Validate dữ liệu (DTO)
+Email, phone, field bắt buộc: ValidationPipe tự validate và trả về lỗi 400 với thông báo chi tiết, ví dụ: "email must be an email".
+Bảo mật
+API key không hợp lệ: ApiKeyGuard trả về 401 Unauthorized, thông báo: "Unauthorized".

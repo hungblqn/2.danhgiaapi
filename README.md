@@ -107,3 +107,314 @@ Validate dữ liệu (DTO)
 Email, phone, field bắt buộc: ValidationPipe tự validate và trả về lỗi 400 với thông báo chi tiết, ví dụ: "email must be an email".
 Bảo mật
 API key không hợp lệ: ApiKeyGuard trả về 401 Unauthorized, thông báo: "Unauthorized".
+
+4. Test api
+get /contacts
+[
+    {
+        "ID": "15",
+        "NAME": "Hùng",
+        "LAST_NAME": "Lô Việt",
+        "ADDRESS": "Hà Nội",
+        "BANK_ACCOUNT": "135135164846",
+        "BANK_NAME": "MBBank",
+        "PHONE": [
+            {
+                "ID": "13",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "+84398054209",
+                "TYPE_ID": "PHONE"
+            }
+        ],
+        "EMAIL": [
+            {
+                "ID": "15",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "hungblqn@hotmail.com",
+                "TYPE_ID": "EMAIL"
+            }
+        ],
+        "WEB": [
+            {
+                "ID": "17",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "hungblqn.com",
+                "TYPE_ID": "WEB"
+            }
+        ]
+    },
+    {
+        "ID": "17",
+        "NAME": "Nguyen Van A",
+        "LAST_NAME": "Nguyen",
+        "ADDRESS": "123 Đường Láng, Hà Nội",
+        "BANK_ACCOUNT": "123456789",
+        "BANK_NAME": "Vietcombank",
+        "PHONE": [
+            {
+                "ID": "19",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "+84901234567",
+                "TYPE_ID": "PHONE"
+            }
+        ],
+        "EMAIL": [
+            {
+                "ID": "21",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "nguyenvana@example.com",
+                "TYPE_ID": "EMAIL"
+            }
+        ],
+        "WEB": [
+            {
+                "ID": "23",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "https://nguyenvana.com",
+                "TYPE_ID": "WEB"
+            }
+        ]
+    },
+    {
+        "ID": "19",
+        "NAME": "An",
+        "LAST_NAME": "Nguyen Van",
+        "ADDRESS": "123 Đường Láng, Hà Nội",
+        "BANK_ACCOUNT": "123456789",
+        "BANK_NAME": "Vietcombank",
+        "PHONE": [
+            {
+                "ID": "25",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "+84943198705",
+                "TYPE_ID": "PHONE"
+            }
+        ],
+        "EMAIL": [
+            {
+                "ID": "27",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "nguyenvana@example.com",
+                "TYPE_ID": "EMAIL"
+            }
+        ],
+        "WEB": [
+            {
+                "ID": "29",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "https://nguyenvana.com",
+                "TYPE_ID": "WEB"
+            }
+        ]
+    },
+    {
+        "ID": "21",
+        "NAME": null,
+        "LAST_NAME": "Liên lạc với #21",
+        "ADDRESS": null,
+        "BANK_ACCOUNT": null,
+        "BANK_NAME": null,
+        "PHONE": [],
+        "EMAIL": [],
+        "WEB": []
+    },
+    {
+        "ID": "23",
+        "NAME": "Mr Hùng",
+        "LAST_NAME": null,
+        "ADDRESS": null,
+        "BANK_ACCOUNT": null,
+        "BANK_NAME": null,
+        "PHONE": [
+            {
+                "ID": "31",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "1234567890",
+                "TYPE_ID": "PHONE"
+            }
+        ],
+        "EMAIL": [
+            {
+                "ID": "33",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "hungblqn@hotmail.com",
+                "TYPE_ID": "EMAIL"
+            }
+        ],
+        "WEB": []
+    },
+    {
+        "ID": "25",
+        "NAME": "test123",
+        "LAST_NAME": null,
+        "ADDRESS": null,
+        "BANK_ACCOUNT": null,
+        "BANK_NAME": null,
+        "PHONE": [
+            {
+                "ID": "35",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "1234567899",
+                "TYPE_ID": "PHONE"
+            }
+        ],
+        "EMAIL": [
+            {
+                "ID": "37",
+                "VALUE_TYPE": "WORK",
+                "VALUE": "test123@gmail.com",
+                "TYPE_ID": "EMAIL"
+            }
+        ],
+        "WEB": []
+    }
+]
+
+post /contacts
+{
+  "name": "Nguyen Van A",
+  "last_name": "Tran",
+  "address": "123 Le Loi, District 1, Ho Chi Minh City",
+  "phone": "+84901234567",
+  "email": "a.nguyen@example.com",
+  "website": "https://example.com",
+  "bank_account": "1234567890",
+  "bank_name": "MB Bank"
+}
+
+put /contacts/27
+{
+  "name": "Nguyen Van B",
+  "last_name": "Tran",
+  "address": "456 Hai Ba Trung, District 3, Ho Chi Minh City",
+  "phone": "+84909876543",
+  "email": "b.nguyen@example.com",
+  "website": "https://example.com",
+  "bank_account": "0987654321",
+  "bank_name": "Vietcombank"
+}
+
+trả  về (thành công)
+{
+    "message": "Contact updated"
+}
+
+delete /contacts/27
+trả về {
+    "message": "Contact deleted"
+}
+
+trả về (thành công)
+{
+    "contactId": 27
+}
+get /contacts/requisite
+
+[
+    {
+        "ID": "9",
+        "ENTITY_TYPE_ID": "3",
+        "ENTITY_ID": "15",
+        "PRESET_ID": "1",
+        "DATE_CREATE": "2025-08-20T19:17:12+03:00",
+        "DATE_MODIFY": "",
+        "CREATED_BY_ID": "1",
+        "MODIFY_BY_ID": null,
+        "NAME": "MB Bank",
+        "CODE": null,
+        "XML_ID": null,
+        "ORIGINATOR_ID": null,
+        "ACTIVE": "Y",
+        "ADDRESS_ONLY": "N",
+        "SORT": "500",
+        "RQ_NAME": null,
+        "RQ_FIRST_NAME": null,
+        "RQ_LAST_NAME": null,
+        "RQ_SECOND_NAME": null,
+        "RQ_COMPANY_ID": null,
+        "RQ_COMPANY_NAME": null,
+        "RQ_COMPANY_FULL_NAME": null,
+        "RQ_COMPANY_REG_DATE": null,
+        "RQ_DIRECTOR": null,
+        "RQ_ACCOUNTANT": null,
+        "RQ_CEO_NAME": null,
+        "RQ_CEO_WORK_POS": null,
+        "RQ_CONTACT": null,
+        "RQ_EMAIL": null,
+        "RQ_PHONE": null,
+        "RQ_FAX": null,
+        "RQ_IDENT_TYPE": null,
+        "RQ_IDENT_DOC": null,
+        "RQ_IDENT_DOC_SER": null,
+        "RQ_IDENT_DOC_NUM": null,
+        "RQ_IDENT_DOC_PERS_NUM": null,
+        "RQ_IDENT_DOC_DATE": null,
+        "RQ_IDENT_DOC_ISSUED_BY": null,
+        "RQ_IDENT_DOC_DEP_CODE": null,
+        "RQ_INN": "5168468468",
+        "RQ_KPP": null,
+        "RQ_USRLE": null,
+        "RQ_IFNS": null,
+        "RQ_OGRN": null,
+        "RQ_OGRNIP": null,
+        "RQ_OKPO": null,
+        "RQ_OKTMO": null,
+        "RQ_OKVED": null,
+        "RQ_EDRPOU": null,
+        "RQ_DRFO": null,
+        "RQ_KBE": null,
+        "RQ_IIN": null,
+        "RQ_BIN": null,
+        "RQ_ST_CERT_SER": null,
+        "RQ_ST_CERT_NUM": null,
+        "RQ_ST_CERT_DATE": null,
+        "RQ_VAT_PAYER": "N",
+        "RQ_VAT_ID": null,
+        "RQ_VAT_CERT_SER": null,
+        "RQ_VAT_CERT_NUM": null,
+        "RQ_VAT_CERT_DATE": null,
+        "RQ_RESIDENCE_COUNTRY": null,
+        "RQ_BASE_DOC": null,
+        "RQ_REGON": null,
+        "RQ_KRS": null,
+        "RQ_PESEL": null,
+        "RQ_LEGAL_FORM": null,
+        "RQ_SIRET": null,
+        "RQ_SIREN": null,
+        "RQ_CAPITAL": null,
+        "RQ_RCS": null,
+        "RQ_CNPJ": null,
+        "RQ_STATE_REG": null,
+        "RQ_MNPL_REG": null,
+        "RQ_CPF": null
+    }
+]
+
+post contacts/requisite
+{
+"ENTITY_TYPE_ID": 3,
+"ENTITY_ID": 15,
+"PRESET_ID": 1,
+"NAME": "Vietcombank Info",
+"RQ_INN": "123456789"
+}
+
+trả về thành công
+{
+    "requisiteId": 11
+}
+
+put localhost:3000/contacts/requisite/11
+{
+"NAME" : "VIETINBANK"
+}
+trả về thành công
+{
+    "message": "Requisite updated"
+}
+
+delete localhost:3000/contacts/requisite/11
+trả về thành công
+{
+    "message": "Requisite deleted"
+}

@@ -418,3 +418,8 @@ trả về thành công
 {
     "message": "Requisite deleted"
 }
+
+Kết quả unit test
+
+https://github.com/user-attachments/assets/647b457a-4689-47de-afa8-264a0c0deae6
+

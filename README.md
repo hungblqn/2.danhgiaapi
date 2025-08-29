@@ -4,7 +4,7 @@ loại bỏ các field custom liên quan đến ngân hàng
 
 thêm ngân hàng bằng cách add requisite trực tiếp với entity_id là contact id
 
-thông tin ngân hàng có thể thêm thủ công hoặc sử dụng các lệnh crm.requisite.bankdetail... để kiểm soát
+thông tin ngân hàng có thể thêm thủ công trên giao diện bitrix24 hoặc nếu làm thêm sẽ sử dụng crm.bank.detail... để crud
 
 https://github.com/user-attachments/assets/4765a04b-070c-48ad-9eea-b718b7656ae3
 

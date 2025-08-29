@@ -1,3 +1,15 @@
+#fix
+
+https://github.com/user-attachments/assets/4765a04b-070c-48ad-9eea-b718b7656ae3
+
+loại bỏ các field custom liên quan đến ngân hàng
+
+thêm ngân hàng bằng cách add requisite trực tiếp với entity_id là contact id
+
+thông tin ngân hàng có thể thêm thủ công hoặc sử dụng các lệnh crm.requisite.bankdetail... để kiểm soát
+
+
+
 #2.danhgiaapi
 1. Cài đặt và cấu hình
    Tải ngrok và dự án. sử dụng ngrok http 3000 để điều hướng. npm i để cài package, chạy server sử dụng npm run start.

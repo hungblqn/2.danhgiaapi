@@ -7,7 +7,7 @@ import { ApiKeyGuard } from '../auth/api-key.guard';
 @UseGuards(ApiKeyGuard) // <-- Bảo vệ toàn bộ controller
 @Controller('contacts')
 export class ContactsController {
-  constructor(private readonly contactsService: ContactsService) {}
+  constructor(private readonly contactsService: ContactsService) { }
 
   @Get()
   findAll() {
@@ -16,6 +16,11 @@ export class ContactsController {
   @Get('/requisite')
   requisiteList() {
     return this.contactsService.requisiteList();
+  }
+  // Lấy requisites theo contact ID
+  @Get('/requisite/:id')
+  getRequisiteByContact(@Param('id', ParseIntPipe) id: number) {
+    return this.contactsService.requisiteByContact(id);
   }
   @Post('/requisite')
   requisiteCreate(@Body() fields: Record<string, any>) {

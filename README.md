@@ -1,6 +1,4 @@
-#fix
-
-https://github.com/user-attachments/assets/4765a04b-070c-48ad-9eea-b718b7656ae3
+# fix
 
 loại bỏ các field custom liên quan đến ngân hàng
 
@@ -8,7 +6,7 @@ thêm ngân hàng bằng cách add requisite trực tiếp với entity_id là c
 
 thông tin ngân hàng có thể thêm thủ công hoặc sử dụng các lệnh crm.requisite.bankdetail... để kiểm soát
 
-
+https://github.com/user-attachments/assets/4765a04b-070c-48ad-9eea-b718b7656ae3
 
 #2.danhgiaapi
 1. Cài đặt và cấu hình
